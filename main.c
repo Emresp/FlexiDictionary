@@ -43,6 +43,10 @@ int main(void)
     {
         kelimesorgu(kelime,sayac);
     }
+    else if(secim==3)
+    {
+        kelime=kelimeekle(kelime,&sayac,&sayac);
+    }
 
     return 0;
 }

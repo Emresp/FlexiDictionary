@@ -138,5 +138,79 @@ void kelimesorgu(Kelimelist* Kelime, int sayac)
     {
         printf("Aramış olduğunuz kelime veritabanında bulunamadı olduğundan eminseniz lütfen tekrar deneyiniz.");
     }
+}
 
+Kelimelist* kelimeekle(Kelimelist* kelime, int* sayac, int* kapasite)
+{
+    int uzunluk;
+
+    //Ramde yeni tahsis işlemleri alan genişletme işlemleri çok kritik olaylar olduğundan dolayı verikaybı yaşama ihtimalimiz var
+    //Bundan dolayı ilk başta her şeyi yedekli genişletiyoruz hatasız çalışırsa ana yere atıyoruz
+    int yeni_kapasite;
+    Kelimelist* temp;
+
+    if (*sayac>=*kapasite)
+    {
+        yeni_kapasite=*kapasite+10;
+       temp = (Kelimelist*) realloc(kelime, sizeof(Kelimelist) * yeni_kapasite);
+
+        if (temp!=NULL)
+        {
+            kelime=temp;
+            *kapasite=yeni_kapasite;
+        }
+        else
+        {
+            printf("Bellekte yeteri kadar yer kalmadığı işlem yapılamıyor.");
+            return kelime;
+        }
+    }
+
+    printf("Eklemek İstediğiniz İngilizce Kelimeyi girin\n");
+    printf("Kelime:");
+    fgets(kelime[*sayac].kullanici_ingilizce, 50, stdin);
+    kelime[*sayac].kullanici_ingilizce[strcspn(kelime[*sayac].kullanici_ingilizce, "\n")] = 0;
+
+    uzunluk=strlen(kelime[*sayac].kullanici_ingilizce);
+
+    for (int i=0; i<uzunluk; i++)
+    {
+        if (i==0)
+        {
+            //ilk harf için büyük
+            kelime[*sayac].kullanici_ingilizce[i] = toupper(kelime[*sayac].kullanici_ingilizce[i]);
+        }
+        else
+        {
+            //diğer harfler için küçük
+            kelime[*sayac].kullanici_ingilizce[i] = tolower(kelime[*sayac].kullanici_ingilizce[i]);
+        }
+    }
+
+    printf("Eklemek İstediğiniz İngilizce Kelimenin Türkçe karşılığını girin girin\n");
+    printf("Kelime:");
+    fgets(kelime[*sayac].kullanici_turkce, 50, stdin);
+    kelime[*sayac].kullanici_turkce[strcspn(kelime[*sayac].kullanici_turkce, "\n")] = 0;
+
+    uzunluk=strlen(kelime[*sayac].kullanici_turkce);
+
+    for (int i=0; i<uzunluk; i++)
+    {
+        if (i==0)
+        {
+            //ilk harf için büyük
+            kelime[*sayac].kullanici_turkce[i] = toupper(kelime[*sayac].kullanici_turkce[i]);
+        }
+        else
+        {
+            //diğer harfler için küçük
+            kelime[*sayac].kullanici_turkce[i] = tolower(kelime[*sayac].kullanici_turkce[i]);
+        }
+    }
+
+    kelime[*sayac].sorgu_sayisi = 0;
+
+    (*sayac)++;
+
+    return kelime;
 }

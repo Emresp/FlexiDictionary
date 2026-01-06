@@ -29,4 +29,7 @@ void tumdosyayaz(Kelimelist* Kelime,int sayac);
 
 void kelimesorgu(Kelimelist* Kelime, int sayac);
 
+Kelimelist* kelimeekle(Kelimelist* kelime, int* sayac, int* kapasite);
+
+
 #endif //FLEXIDICTIONARY_FLEXIDICTIONARY_H
