@@ -143,74 +143,123 @@ void kelimesorgu(Kelimelist* Kelime, int sayac)
 Kelimelist* kelimeekle(Kelimelist* kelime, int* sayac, int* kapasite)
 {
     int uzunluk;
+    char eklencek_kelime[50];
+    int bulundu_index = -1;//bulunup bulunmadığını anlamak ve yer takibi için
 
-    //Ramde yeni tahsis işlemleri alan genişletme işlemleri çok kritik olaylar olduğundan dolayı verikaybı yaşama ihtimalimiz var
-    //Bundan dolayı ilk başta her şeyi yedekli genişletiyoruz hatasız çalışırsa ana yere atıyoruz
-    int yeni_kapasite;
-    Kelimelist* temp;
+    printf("Eklemek Isteginiz Ingilizce Kelime: ");
 
-    if (*sayac>=*kapasite)
-    {
-        yeni_kapasite=*kapasite+10;
-       temp = (Kelimelist*) realloc(kelime, sizeof(Kelimelist) * yeni_kapasite);
+    fgets(eklencek_kelime, 50, stdin);
+    eklencek_kelime[strcspn(eklencek_kelime, "\n")] = 0;
 
-        if (temp!=NULL)
-        {
-            kelime=temp;
-            *kapasite=yeni_kapasite;
-        }
-        else
-        {
-            printf("Bellekte yeteri kadar yer kalmadığı işlem yapılamıyor.");
-            return kelime;
-        }
-    }
-
-    printf("Eklemek İstediğiniz İngilizce Kelimeyi girin\n");
-    printf("Kelime:");
-    fgets(kelime[*sayac].kullanici_ingilizce, 50, stdin);
-    kelime[*sayac].kullanici_ingilizce[strcspn(kelime[*sayac].kullanici_ingilizce, "\n")] = 0;
-
-    uzunluk=strlen(kelime[*sayac].kullanici_ingilizce);
-
+    uzunluk = strlen(eklencek_kelime);
     for (int i=0; i<uzunluk; i++)
     {
         if (i==0)
         {
             //ilk harf için büyük
-            kelime[*sayac].kullanici_ingilizce[i] = toupper(kelime[*sayac].kullanici_ingilizce[i]);
+            eklencek_kelime[i] = toupper(eklencek_kelime[i]);
         }
         else
         {
             //diğer harfler için küçük
-            kelime[*sayac].kullanici_ingilizce[i] = tolower(kelime[*sayac].kullanici_ingilizce[i]);
+            eklencek_kelime[i] = tolower(eklencek_kelime[i]);
         }
     }
 
-    printf("Eklemek İstediğiniz İngilizce Kelimenin Türkçe karşılığını girin girin\n");
-    printf("Kelime:");
-    fgets(kelime[*sayac].kullanici_turkce, 50, stdin);
-    kelime[*sayac].kullanici_turkce[strcspn(kelime[*sayac].kullanici_turkce, "\n")] = 0;
-
-    uzunluk=strlen(kelime[*sayac].kullanici_turkce);
-
-    for (int i=0; i<uzunluk; i++)
+    for (int i = 0; i < *sayac; i++)
     {
-        if (i==0)
+        if (strcmp(kelime[i].ingilizce, eklencek_kelime) == 0)
         {
-            //ilk harf için büyük
-            kelime[*sayac].kullanici_turkce[i] = toupper(kelime[*sayac].kullanici_turkce[i]);
-        }
-        else
-        {
-            //diğer harfler için küçük
-            kelime[*sayac].kullanici_turkce[i] = tolower(kelime[*sayac].kullanici_turkce[i]);
+            bulundu_index = i;
+            break;
         }
     }
 
-    kelime[*sayac].sorgu_sayisi = 0;
+    //zaten veritabanında varsa
+    if (bulundu_index != -1)
+    {
+        printf("\nBu kelime zaten sistemde var (%s). Yanina notunuz ekleniyor.\n", kelime[bulundu_index].turkce);
 
-    (*sayac)++;
+        strcpy(kelime[bulundu_index].kullanici_ingilizce, eklencek_kelime);
+
+        printf("Sizin Ceviriniz (Turkce): ");
+        fgets(kelime[bulundu_index].kullanici_turkce, 50, stdin);
+        kelime[bulundu_index].kullanici_turkce[strcspn(kelime[bulundu_index].kullanici_turkce, "\n")] = 0;
+
+        uzunluk = strlen(kelime[bulundu_index].kullanici_turkce);
+        for (int i=0; i<uzunluk; i++)
+        {
+            if (i==0)
+            {
+                //ilk harf için büyük
+                kelime[bulundu_index].kullanici_turkce[i] = toupper(kelime[bulundu_index].kullanici_turkce[i]);
+            }
+            else
+            {
+                //diğer harfler için küçük
+                kelime[bulundu_index].kullanici_turkce[i] = tolower(kelime[bulundu_index].kullanici_turkce[i]);
+            }
+        }
+
+        printf("Mevcut kelime güncellendi\n");
+    }
+
+    //veritabanında yoksa
+    else
+    {
+        int yeni_kapasite;
+        Kelimelist* temp;
+
+        //Ramde yeni tahsis işlemleri alan genişletme işlemleri çok kritik olaylar olduğundan dolayı verikaybı yaşama ihtimalimiz var
+        //Bundan dolayı ilk başta her şeyi yedekli genişletiyoruz hatasız çalışırsa ana yere atıyoruz
+        if (*sayac >= *kapasite)
+        {
+            yeni_kapasite = *kapasite + 10;
+            temp = (Kelimelist*) realloc(kelime, sizeof(Kelimelist) * yeni_kapasite);
+
+            if (temp != NULL)
+            {
+                kelime = temp;
+                *kapasite = yeni_kapasite;
+            }
+            else
+            {
+                printf("Bellekte yeteri kadar yer kalmadığı işlem yapılamıyor.");
+                return kelime;
+            }
+        }
+
+        //sistem kısmının düzgün bir şekilde boş durması için - koyduk
+        strcpy(kelime[*sayac].ingilizce, "-");
+        strcpy(kelime[*sayac].turkce, "-");
+
+        strcpy(kelime[*sayac].kullanici_ingilizce, eklencek_kelime);
+
+        printf("Kelime sistemde yok. Yeni kayit aciliyor.\n");
+        printf("Sizin Ceviriniz (Turkce): ");
+        fgets(kelime[*sayac].kullanici_turkce, 50, stdin);
+        kelime[*sayac].kullanici_turkce[strcspn(kelime[*sayac].kullanici_turkce, "\n")] = 0;
+
+        uzunluk = strlen(kelime[*sayac].kullanici_turkce);
+        for (int i=0; i<uzunluk; i++)
+        {
+            if (i==0)
+            {
+                //ilk harf için büyük
+                kelime[*sayac].kullanici_turkce[i] = toupper(kelime[*sayac].kullanici_turkce[i]);
+            }
+            else
+            {
+                //diğer harfler için küçük
+                kelime[*sayac].kullanici_turkce[i] = tolower(kelime[*sayac].kullanici_turkce[i]);
+            }
+        }
+
+        kelime[*sayac].sorgu_sayisi = 0;
+        (*sayac)++;
+
+        printf("Yeni kelime eklendi!\n");
+    }
 
     return kelime;
 }
