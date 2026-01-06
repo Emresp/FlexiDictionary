@@ -27,4 +27,6 @@ int dosyaoku(Kelimelist* kelime, int kapasite);
 
 void tumdosyayaz(Kelimelist* Kelime,int sayac);
 
+void kelimesorgu(Kelimelist* Kelime, int sayac);
+
 #endif //FLEXIDICTIONARY_FLEXIDICTIONARY_H

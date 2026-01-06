@@ -38,5 +38,11 @@ int main(void)
     {
         tumdosyayaz(kelime,sayac);
     }
+
+    else if(secim==2)
+    {
+        kelimesorgu(kelime,sayac);
+    }
+
     return 0;
 }
