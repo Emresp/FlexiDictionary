@@ -31,30 +31,55 @@ int main(void)
 
     printf("\n");
 
+    printf("\nDevam etmek icin ENTER tusuna basin...");
+    getchar();
+
     do
     {
+        //Döngü her başa döndüğünde eski mesajları silmek için
+        system("cls");
+
         menu();
         secim = secimiver();
 
         if(secim==1)
         {
             tumdosyayaz(kelime,sayac);
+            //her şey anında olmasın diye
+            printf("\nAna menuye donmek icin ENTER tusuna basin...");
+            getchar();
         }
 
         else if(secim==2)
         {
             kelimesorgu(kelime,sayac);
+
+            printf("\nAna menuye donmek icin ENTER tusuna basin...");
+            getchar();
         }
         else if(secim==3)
         {
             kelime=kelimeekle(kelime,&sayac,&kapasite);
+            //her şey anında olmasın diye
+            printf("\nAna menuye dönmek icin ENTER tuşuna basın...");
+            getchar();
+
         }
         else if(secim==4)
         {
             dosyayikaydet(kelime,sayac);
+
+            //cmd anında kapanmasın diye
             printf("Çıkış Yapılıyor ENTER tuşuna basın");
             break;
         }
+        else
+        {
+            printf("Gecersiz secim! Lutfen tekrar deneyin.\n");
+            // Hata mesajını görmesi için kısa bekleme
+            Sleep(1500);
+        }
+
     }while(1);
 
 
