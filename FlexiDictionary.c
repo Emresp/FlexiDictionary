@@ -146,7 +146,7 @@ Kelimelist* kelimeekle(Kelimelist* kelime, int* sayac, int* kapasite)
     char eklencek_kelime[50];
     int bulundu_index = -1;//bulunup bulunmadığını anlamak ve yer takibi için
 
-    printf("Eklemek Isteginiz Ingilizce Kelime: ");
+    printf("Eklemek İstediğiniz İngilizce Kelime: ");
 
     fgets(eklencek_kelime, 50, stdin);
     eklencek_kelime[strcspn(eklencek_kelime, "\n")] = 0;
@@ -178,11 +178,11 @@ Kelimelist* kelimeekle(Kelimelist* kelime, int* sayac, int* kapasite)
     //zaten veritabanında varsa
     if (bulundu_index != -1)
     {
-        printf("\nBu kelime zaten sistemde var (%s). Yanina notunuz ekleniyor.\n", kelime[bulundu_index].turkce);
+        printf("\nBu kelime zaten sistemde var (%s). Yanina sizin bildiğiniz ekleniyor.\n", kelime[bulundu_index].turkce);
 
         strcpy(kelime[bulundu_index].kullanici_ingilizce, eklencek_kelime);
 
-        printf("Sizin Ceviriniz (Turkce): ");
+        printf("Sizin Çeviriniz (Türkçe): ");
         fgets(kelime[bulundu_index].kullanici_turkce, 50, stdin);
         kelime[bulundu_index].kullanici_turkce[strcspn(kelime[bulundu_index].kullanici_turkce, "\n")] = 0;
 
@@ -235,8 +235,8 @@ Kelimelist* kelimeekle(Kelimelist* kelime, int* sayac, int* kapasite)
 
         strcpy(kelime[*sayac].kullanici_ingilizce, eklencek_kelime);
 
-        printf("Kelime sistemde yok. Yeni kayit aciliyor.\n");
-        printf("Sizin Ceviriniz (Turkce): ");
+        printf("Kelime sistemde yok.Ynei kelime girişi\n");
+        printf("Sizin Çeviriniz (Türkçe): ");
         fgets(kelime[*sayac].kullanici_turkce, 50, stdin);
         kelime[*sayac].kullanici_turkce[strcspn(kelime[*sayac].kullanici_turkce, "\n")] = 0;
 
@@ -260,6 +260,24 @@ Kelimelist* kelimeekle(Kelimelist* kelime, int* sayac, int* kapasite)
 
         printf("Yeni kelime eklendi!\n");
     }
-
     return kelime;
+}
+
+void dosyayikaydet(Kelimelist* kelime,int sayac)
+{
+    FILE *dosya;
+
+    dosya=fopen("dictionary.txt","w");
+
+    if (dosya == NULL)
+    {
+        printf("Kayıt dosyası açılamadı veriler kayıt edilemiyor.");
+        return;
+    }
+
+    for (int i=0;i<sayac;i++)
+    {
+        fprintf(dosya,"%s;%s;%s;%s;%d\n",kelime[i].ingilizce,kelime[i].turkce,kelime[i].kullanici_ingilizce,kelime[i].kullanici_turkce,kelime[i].sorgu_sayisi);
+    }
+    fclose(dosya);
 }

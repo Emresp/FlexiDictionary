@@ -6,3 +6,4 @@ set(CMAKE_C_STANDARD 23)
 add_executable(FlexiDictionary main.c
         FlexiDictionary.h
         FlexiDictionary.c)
+#Final

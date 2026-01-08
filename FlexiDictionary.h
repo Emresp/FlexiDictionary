@@ -31,5 +31,7 @@ void kelimesorgu(Kelimelist* Kelime, int sayac);
 
 Kelimelist* kelimeekle(Kelimelist* kelime, int* sayac, int* kapasite);
 
+void dosyayikaydet(Kelimelist* kelime,int sayac);
+
 
 #endif //FLEXIDICTIONARY_FLEXIDICTIONARY_H
