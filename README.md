@@ -49,6 +49,6 @@ Program ana menüsü üzerinden 4 temel işlem yapılabilir:
 ## Yazar
 
 - [@Emresp](https://github.com/Emresp) - Yazılım Müh. 1. Sınıf Öğrencisi (github)
-- [@Emre Ayözcan](www.linkedin.com/in/emre-ayözcan-571ba3387) - Yazılım Müh. 1. Sınıf Öğrencisi (Linkedin)
+
 
   
